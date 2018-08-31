@@ -39,16 +39,13 @@ public:
     }
 
     bool Test(int bit) {
-        if (bit < 0 && bit >= bits.size()) {
-            return false;
-        }
         int n = bit / 32;
         int p = bit % 32;
         int pos = (n * 32) + (31 - p);
         return bits[pos] == 1;
     }
 
-    void Set(int bit) {
+    void Set(unsigned int bit) {
         while (bit > bits.size()) {
             increaseSet(1);
         }
@@ -59,9 +56,6 @@ public:
     }
 
     void Clear(int bit) {
-        if (bit < 0 && bit >= bits.size()) {
-            return;
-        }
         int n = bit / 32;
         int p = bit % 32;
         int pos = (n * 32) + (31 - p);
