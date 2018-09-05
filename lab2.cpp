@@ -11,7 +11,7 @@ private:
         int s = bits.size();
         bits.resize(s + (32 * n));
         for (unsigned int i = s; i < bits.size(); i++) {
-            bits[i - 1] = 0;
+            bits[i - 1];
         }
     }
 
@@ -173,6 +173,6 @@ int main() {
             default:
                 printf("\nINVALID COMMAND !!! ");
         }
-        scanf("%*c", &command);
+        scanf("%c", &command);
     }
 }
