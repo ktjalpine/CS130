@@ -1,178 +1,191 @@
-#include<iostream>
-#include<vector>
+/*
+ * Kyle James
+ * CS 130
+ * 07 September 2018
+ * EXPLAIN WHAT THE PROGRAM DOES HERE PLZ
+ */
+
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
 class BITSET {
 private:
-    vector<int> bits;
+    vector<int> bitsets;
 
-    void increaseSet(int n) {
-        int s = bits.size();
-        bits.resize(s + (32 * n));
-        for (unsigned int i = s; i < bits.size(); i++) {
-            bits[i - 1];
-        }
-    }
-
-    bool shrink() {
-        int n = bits.size();
-        if (n <= 32) {
+    //Comment explaining what the function does
+    bool shrink(){
+        bool shrink = true;
+        int l = bitsets.size();
+        if(l <= 32 ) {
             return false;
         }
-        bool shr = true;
-        for (int i = n - 32; i < n; i++) {
-            if (bits[i] == 1) {
-                shr = false;
+
+        for(int i = l - 32; i < l; i++){
+            if(bitsets[i] == 1){
+                shrink = false;
                 break;
             }
         }
-        if (shr) {
-            bits.resize(n - 32);
+
+        if(shrink) {
+            bitsets.resize(l - 32);
         }
-        return shr;
+
+        return shrink;
     }
 
+    //Comment explaining what the function does
+    void resizeSet(int l){
+        int size = bitsets.size();
+        bitsets.resize(size + (32 * l));
+
+        for(unsigned int i = size; i < bitsets.size(); i++){
+            bitsets[i-1];
+        }
+    }
 public:
     BITSET() {
-        increaseSet(1);
+        resizeSet(1);
     }
 
-    bool Test(int bit) {
-        int n = bit / 32;
-        int p = bit % 32;
-        int pos = (n * 32) + (31 - p);
-        return bits[pos] == 1;
+
+    //Insert comment explaining what this function does
+    bool test(int bit){
+        int y = bit % 32;
+        int k = bit / 32;
+
+        int position = (k * 32) + (31 - y);
+        return bitsets[position] == 1;
     }
 
-    void Set(unsigned int bit) {
-        while (bit > bits.size()) {
-            increaseSet(1);
+    void set(int bit){
+        while(bit > bitsets.size()){
+            resizeSet(1);
         }
-        int n = bit / 32;
-        int p = bit % 32;
-        int pos = (n * 32) + (31 - p);
-        bits[pos] = 1;
+
+        int y = bit % 32;
+        int k = bit / 32;
+
+        int position = (k * 32) + (31 - y);
+        bitsets[position] = 1;
     }
 
-    void Clear(int bit) {
-        int n = bit / 32;
-        int p = bit % 32;
-        int pos = (n * 32) + (31 - p);
-        bits[pos] = 0;
-        while (shrink());
+    void clear(int bit){
+        int y = bit % 32;
+        int k = bit / 32;
+
+        int position = (k * 32) + (31 - y);
+        bitsets[position] = 0;
+        while(shrink());
     }
 
-    int GetNumSets() {
-        return bits.size() / 32;
+    int getNumSets(){
+        return bitsets.size() / 32;
     }
 
-    void inc() {
-        increaseSet(1);
-    }
+    string toBinary(int value, int spacing){
+        int i = 0;
+        string space;
+        BITSET bitset1;
 
-    void print(int n) {
-        if (n < 0 || n > GetNumSets()) {
-            return;
-        }
-        for (int i = n * 32; i < (n + 1) * 32; i++) {
-            if (i % 32 == 0) {
-                printf("\nSET %d: ", i / 32);
+        while(value > 2) {
+            if( value % 2 == 0) {
+                bitset1.clear(i);
             }
-            if (i % 4 == 0) {
-                printf(" ");
-            }
-            printf("%d", bits[i]);
-        }
-    }
 
+            else {
+                bitset1.set(i);
+            }
+            i++;
+
+            value = value / 2;
+        }
+
+        if( value == 1) {
+            bitset1.set(i);
+        }
+
+        if(value == 2) {
+            bitset1.clear(i);
+            i++;
+            bitset1.set(i);
+        }
+
+        for(int i = 32; i > 0; i--) {
+            if(i != 32 && i % spacing == 0) {
+                space += ' ';
+            }
+
+            if(bitset1.test(i)){
+                space += '0';
+            }
+        }
+
+        return space;
+    }
 };
 
-string ToBinary(int val, int space) {
-    BITSET b;
-    int i = 0;
-    while (val > 2) {
-        if (val % 2 == 0) {
-            b.Clear(i);
-        } else {
-            b.Set(i);
-        }
-        i++;
-        val = val / 2;
-    }
-
-    if (val == 1) {
-        b.Set(i);
-    }
-
-    if (val == 2) {
-        b.Clear(i);
-        i++;
-        b.Set(i);
-    }
-    string s = "";
-    for (int i = 32; i > 0; i--) {
-        if (i != 32 && i % space == 0) {
-            s += ' ';
-        }
-        if (b.Test(i)) {
-            s += '1';
-        } else {
-            s += '0';
-        }
-    }
-    cout << s;
-    return s;
-}
-
 int main() {
-    BITSET b;
-    char command = ' ';
-    while (command != 'q') {
-        printf("\nCMD >> ");
-        scanf("%c", &command);
-        switch (command) {
+    BITSET bitset2;
+    char input;
+
+    while(input != 'q'){
+        printf("\nYour Command: ");
+        scanf("%c", &input);
+
+        switch(input){
             case 't': {
-                int n;
-                scanf("%d", &n);
-                if (b.Test(n)) {
+                int i;
+                scanf("%d",&i);
+                if(bitset2.test(i)){
                     printf("\n1");
-                } else {
+                }
+                else {
                     printf("\n0");
                 }
                 break;
             }
+
             case 's': {
-                int n;
-                scanf("%d", &n);
-                b.Set(n);
+                int i;
+                scanf("%d", &i);
+                bitset2.set(i);
                 break;
             }
-            case 'g': {
-                int n;
-                scanf("%d", &n);
-                //please specify it clearly i didn't get
-                b.print(n);
-                break;
-            }
-            case 'n': {
-                int n = b.GetNumSets();
-                printf("\nNumber Of Set : %d", n);
-                break;
-            }
-            case 'q': {
-                command = 'q';
-                break;
-            }
+
             case 'c': {
-                int n;
-                scanf("%d", &n);
-                b.Clear(n);
+                int i;
+                scanf("%d", &i);
+                bitset2.clear(i);
                 break;
             }
-            default:
-                printf("\nINVALID COMMAND !!! ");
+
+            case 'g': {
+                int i;
+                scanf("%d", &i);
+
+                //Rewrite print function here
+            }
+
+            case 'n': {
+                int i;
+                scanf("%d,&i");
+                bitset2.clear(i);
+                break;
+            }
+
+            case 'q': {
+                input = 'q';
+                break;
+            }
+
+            default: {
+                printf("\nNot a valid input. Make sure your input is undercase.");
+            }
+
+            scanf("%c", &input);
         }
-        scanf("%c", &command);
     }
 }
