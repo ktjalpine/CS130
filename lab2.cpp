@@ -15,21 +15,21 @@ private:
     vector<int> bitsets;
 
     //Comment explaining what the function does
-    bool shrink(){
+    bool shrink() {
         bool shrink = true;
         int l = bitsets.size();
-        if(l <= 32 ) {
+        if (l <= 32) {
             return false;
         }
 
-        for(int i = l - 32; i < l; i++){
-            if(bitsets[i] == 1){
+        for (int i = l - 32; i < l; i++) {
+            if (bitsets[i] == 1) {
                 shrink = false;
                 break;
             }
         }
 
-        if(shrink) {
+        if (shrink) {
             bitsets.resize(l - 32);
         }
 
@@ -37,14 +37,15 @@ private:
     }
 
     //Comment explaining what the function does
-    void resizeSet(int l){
+    void resizeSet(int l) {
         int size = bitsets.size();
         bitsets.resize(size + (32 * l));
 
-        for(unsigned int i = size; i < bitsets.size(); i++){
-            bitsets[i-1];
+        for (unsigned int i = size; i < bitsets.size(); i++) {
+            bitsets[i - 1];
         }
     }
+
 public:
     BITSET() {
         resizeSet(1);
@@ -52,7 +53,7 @@ public:
 
 
     //Insert comment explaining what this function does
-    bool test(int bit){
+    bool test(int bit) {
         int y = bit % 32;
         int k = bit / 32;
 
@@ -60,8 +61,8 @@ public:
         return bitsets[position] == 1;
     }
 
-    void set(int bit){
-        while(bit > bitsets.size()){
+    void set(int bit) {
+        while (bit > bitsets.size()) {
             resizeSet(1);
         }
 
@@ -72,30 +73,28 @@ public:
         bitsets[position] = 1;
     }
 
-    void clear(int bit){
+    void clear(int bit) {
         int y = bit % 32;
         int k = bit / 32;
 
         int position = (k * 32) + (31 - y);
         bitsets[position] = 0;
-        while(shrink());
+        while (shrink());
     }
 
-    int getNumSets(){
+    int getNumSets() {
         return bitsets.size() / 32;
     }
 
-    string toBinary(int value, int spacing){
+    string toBinary(int value, int spacing) {
         int i = 0;
         string space;
         BITSET bitset1;
 
-        while(value > 2) {
-            if( value % 2 == 0) {
+        while (value > 2) {
+            if (value % 2 == 0) {
                 bitset1.clear(i);
-            }
-
-            else {
+            } else {
                 bitset1.set(i);
             }
             i++;
@@ -103,27 +102,41 @@ public:
             value = value / 2;
         }
 
-        if( value == 1) {
+        if (value == 1) {
             bitset1.set(i);
         }
 
-        if(value == 2) {
+        if (value == 2) {
             bitset1.clear(i);
             i++;
             bitset1.set(i);
         }
 
-        for(int i = 32; i > 0; i--) {
-            if(i != 32 && i % spacing == 0) {
+        for (int i = 32; i > 0; i--) {
+            if (i != 32 && i % spacing == 0) {
                 space += ' ';
             }
 
-            if(bitset1.test(i)){
+            if (bitset1.test(i)) {
                 space += '0';
             }
         }
 
         return space;
+    }
+
+    void outputNumSets(int l) {
+        for (int i = l * 32; i < (l + 1) * 32; i++) {
+            if (i % 32 == 0) {
+                printf("\nBitset: %d", i / 32);
+            }
+
+            if (i % 4 == 0) {
+                printf(" ");
+            }
+
+            printf("%d", bitsets[i]);
+        }
     }
 };
 
@@ -131,18 +144,17 @@ int main() {
     BITSET bitset2;
     char input;
 
-    while(input != 'q'){
+    while (input != 'q') {
         printf("\nYour Command: ");
         scanf("%c", &input);
 
-        switch(input){
+        switch (input) {
             case 't': {
                 int i;
-                scanf("%d",&i);
-                if(bitset2.test(i)){
+                scanf("%d", &i);
+                if (bitset2.test(i)) {
                     printf("\n1");
-                }
-                else {
+                } else {
                     printf("\n0");
                 }
                 break;
@@ -165,14 +177,14 @@ int main() {
             case 'g': {
                 int i;
                 scanf("%d", &i);
+                bitset2.outputNumSets(i);
+                break;
 
-                //Rewrite print function here
             }
 
             case 'n': {
-                int i;
-                scanf("%d,&i");
-                bitset2.clear(i);
+                int i = bitset2.getNumSets();
+                printf("\nNumber of Bitsets : %d", i);
                 break;
             }
 
@@ -182,10 +194,10 @@ int main() {
             }
 
             default: {
-                printf("\nNot a valid input. Make sure your input is undercase.");
+                printf("\nNot a valid input. Make sure your input is undercase. Press enter to enter another command.");
             }
 
-            scanf("%c", &input);
+                scanf("%c", &input);
         }
     }
 }
