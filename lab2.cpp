@@ -2,7 +2,7 @@
  * Kyle James
  * CS 130
  * 07 September 2018
- * EXPLAIN WHAT THE PROGRAM DOES HERE PLZ
+ * A program that performs simple bitwise operations.
  */
 
 #include <iostream>
@@ -14,7 +14,10 @@ class BITSET {
 private:
     vector<int> bitsets;
 
-    //Comment explaining what the function does
+    /* This function "shrinks" the set vector when the upper sets are cleared to 0,
+    *  as per the instructions in step number 5.
+    */
+
     bool shrink() {
         bool shrink = true;
         int l = bitsets.size();
@@ -36,7 +39,7 @@ private:
         return shrink;
     }
 
-    //Comment explaining what the function does
+    //Function resizes the vector of integers to size 1
     void resizeSet(int l) {
         int size = bitsets.size();
         bitsets.resize(size + (32 * l));
@@ -52,8 +55,9 @@ public:
     }
 
 
-    //Insert comment explaining what this function does
+    //Returns true or false given an integer location
     bool test(int bit) {
+        //This code I reuse alot, all it does it locate an integer location
         int y = bit % 32;
         int k = bit / 32;
 
@@ -61,7 +65,8 @@ public:
         return bitsets[position] == 1;
     }
 
-    void set(int bit) {
+    //Sets an integer location
+    void set(unsigned int bit) {
         while (bit > bitsets.size()) {
             resizeSet(1);
         }
@@ -73,6 +78,7 @@ public:
         bitsets[position] = 1;
     }
 
+    //Sets a given bit to 0
     void clear(int bit) {
         int y = bit % 32;
         int k = bit / 32;
@@ -82,10 +88,12 @@ public:
         while (shrink());
     }
 
+    //Returns number of sets
     int getNumSets() {
         return bitsets.size() / 32;
     }
 
+    //Converts a set to binary
     string toBinary(int value, int spacing) {
         int i = 0;
         string space;
@@ -125,6 +133,7 @@ public:
         return space;
     }
 
+    //Converts a set to binary and outputs the set
     void outputNumSets(int l) {
         for (int i = l * 32; i < (l + 1) * 32; i++) {
             if (i % 32 == 0) {
@@ -143,61 +152,76 @@ public:
 int main() {
     BITSET bitset2;
     char input;
+    bool endLoop;
 
-    while (input != 'q') {
-        printf("\nYour Command: ");
-        scanf("%c", &input);
 
-        switch (input) {
-            case 't': {
-                int i;
-                scanf("%d", &i);
-                if (bitset2.test(i)) {
-                    printf("\n1");
-                } else {
-                    printf("\n0");
+        while (input != 'q') {
+            while(endLoop != true) {
+            printf("\nYour Command: ");
+            scanf("%c", &input);
+
+            switch (input) {
+                case 't': {
+                    int i;
+                    scanf("%d", &i);
+                    if (bitset2.test(i)) {
+                        printf("\n1");
+                    } else {
+                        printf("\n0");
+                    }
+                    break;
                 }
-                break;
+
+                case 's': {
+                    int i;
+                    scanf("%d", &i);
+                    bitset2.set(i);
+                    break;
+                }
+
+                case 'c': {
+                    int i;
+                    scanf("%d", &i);
+                    bitset2.clear(i);
+                    break;
+                }
+
+                case 'g': {
+                    int i;
+                    scanf("%d", &i);
+                    bitset2.outputNumSets(i);
+                    break;
+
+                }
+
+                case 'n': {
+                    int i = bitset2.getNumSets();
+                    printf("\nNumber of Bitsets : %d", i);
+                    break;
+                }
+
+                case 'q': {
+                    input = 'q';
+                    break;
+                }
+
+                    //Case fixes problem of running through the program and printing an
+                    //unnecessary error message.
+                case ' ': {
+                    input = 'q';
+                    break;
+                }
+
+                default:
+                    printf("\nNot a valid input. Make sure your input is undercase. Press enter to enter another command.");
+
             }
 
-            case 's': {
-                int i;
-                scanf("%d", &i);
-                bitset2.set(i);
-                break;
+            if(input == 'q'){
+                endLoop = true;
             }
-
-            case 'c': {
-                int i;
-                scanf("%d", &i);
-                bitset2.clear(i);
-                break;
-            }
-
-            case 'g': {
-                int i;
-                scanf("%d", &i);
-                bitset2.outputNumSets(i);
-                break;
-
-            }
-
-            case 'n': {
-                int i = bitset2.getNumSets();
-                printf("\nNumber of Bitsets : %d", i);
-                break;
-            }
-
-            case 'q': {
-                input = 'q';
-                break;
-            }
-
-            default: {
-                printf("\nNot a valid input. Make sure your input is undercase. Press enter to enter another command.");
-            }
-
-                scanf("%c", &input);
+            scanf("%c", &input);
         }
     }
+
 }
