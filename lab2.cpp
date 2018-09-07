@@ -13,7 +13,6 @@ using namespace std;
 class BITSET {
 private:
     vector<int> bitsets;
-
     /* This function "shrinks" the set vector when the upper sets are cleared to 0,
     *  as per the instructions in step number 5.
     */
@@ -223,5 +222,4 @@ int main() {
             scanf("%c", &input);
         }
     }
-
 }
